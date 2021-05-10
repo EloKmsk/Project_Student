@@ -120,16 +120,20 @@ Ls données indispensables correspondent souvent aux données de l'administrateu
 
 1. Dans `App/DataFixtures/AppFixtures.php`
    - Le fichier basique ressemble à cela :
-   
+
    ```
    <?php
    namespace App\DataFixtures;
+
    use Doctrine\Bundle\FixturesBundle\Fixture;
    use Doctrine\Persistence\ObjectManager;
+
    class AppFixtures extends Fixture
    {
+
    // Sauvegarde dans la BDD
    $manager->flush();
+   
    }
    ```
 
