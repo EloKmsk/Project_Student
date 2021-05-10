@@ -120,21 +120,18 @@ Ls données indispensables correspondent souvent aux données de l'administrateu
 
 1. Dans `App/DataFixtures/AppFixtures.php`
    - Le fichier basique ressemble à cela :
-
-    <?php
-    namespace App\DataFixtures;
-
-    use Doctrine\Bundle\FixturesBundle\Fixture;
-    use Doctrine\Persistence\ObjectManager;
-
-
-    class AppFixtures extends Fixture
-    {
-
-      // Sauvegarde dans la BDD
-      $manager->flush();
+   
+   ```
+   <?php
+   namespace App\DataFixtures;
+   use Doctrine\Bundle\FixturesBundle\Fixture;
+   use Doctrine\Persistence\ObjectManager;
+   class AppFixtures extends Fixture
+   {
+   // Sauvegarde dans la BDD
+   $manager->flush();
    }
-
+   ```
 
    - En haut du fichier, nous avons la balise d'ouverture de langage PHP, suivi de l'importation de dépendances et de fichier.
 2. Création des données indispensables :
