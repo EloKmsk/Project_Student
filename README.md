@@ -119,6 +119,7 @@ Les dépendances ci-dessous nous permettrons de créer des fixtures, de créer d
 Ls données indispensables correspondent souvent aux données de l'administrateur de la BDD. Voici la procédure à suivre.
 
 1. Dans `App/DataFixtures/AppFixtures.php`
+
    - Le fichier basique ressemble à cela :
 
    ```
@@ -131,13 +132,12 @@ Ls données indispensables correspondent souvent aux données de l'administrateu
    class AppFixtures extends Fixture
    {
 
-   // Sauvegarde dans la BDD
-   $manager->flush();
-   
+     // Sauvegarde dans la BDD
+     $manager->flush();
+
    }
    ```
 
    - En haut du fichier, nous avons la balise d'ouverture de langage PHP, suivi de l'importation de dépendances et de fichier.
+
 2. Création des données indispensables :
-
-
