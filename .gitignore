@@ -1,7 +1,7 @@
 /.history
 /.env
 /.env.test
-/phpunit.xml.dist
+phpunit.xml.dist
 /symfony.lock
 
 ###> symfony/framework-bundle ###
