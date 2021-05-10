@@ -1,4 +1,4 @@
-# ECF_Back avec Symfony
+# ECF_Back avec Symfony PARTIE 1
 
 Projet Symfony avec mise en place d'une BDD.
 
@@ -309,4 +309,5 @@ Les données test, comme son nom l'indique, correspondent à des données aléat
    - Pour cela, nous faisons la commande `php bin/console doctrine:fixtures:load`
    - On va nous demander si nous voulons effacer toutes les données déjà mises dans la BDD afin de les remplacer par les données du fichier `AppFixtures.php`, nous mettons 'yes' et on appuie sur Return.
 
+# ECF_Back avec Symfony PARTIE 2
 
