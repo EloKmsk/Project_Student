@@ -7,26 +7,33 @@ Projet Symfony avec mise en place d'une BDD.
 Avant de commencer un projet, il est important d'organiser la structure de sa BDD.
 
 ### user
-   - id: clé primaire
-   - email: varchar 190, unique
-   - roles: text
-   - password: varchar 190
-   - firstname: varchar 190
-   - lastname: varchar 190
-   - phone: varchar 20, nullable
-   - school_year_id: clé étrangère qui pointe vers school_year.id
+
+- id: clé primaire
+- email: varchar 190, unique
+- roles: text
+- password: varchar 190
+- firstname: varchar 190
+- lastname: varchar 190
+- phone: varchar 20, nullable
+- school_year_id: clé étrangère qui pointe vers school_year.id
+
 ### school_year
-   - id: clé primaire
-   - name: varchar 190
-   - date_start: datetime, nullable
-   - date_end: datetime, nullable
+
+- id: clé primaire
+- name: varchar 190
+- date_start: datetime, nullable
+- date_end: datetime, nullable
+
 ### project
-   - id: clé primaire
-   - name: varchar 190
-   - description: text, nullable
+
+- id: clé primaire
+- name: varchar 190
+- description: text, nullable
+
 ### project_user
-   - project_id: clé étrangère qui pointe vers project.id
-   - user_id: clé étrangère qui pointe vers user.id
+
+- project_id: clé étrangère qui pointe vers project.id
+- user_id: clé étrangère qui pointe vers user.id
 
 1. L'entité User a une relation ManyToMany avec Project.
 2. L'entité User a une relation ManyToOne avec SchoolYear.
@@ -82,10 +89,10 @@ Pour créer les tables de la BDD, nous allons utiliser Doctrine. Voici les déma
    - Cette commande va nous permettre de créer une entité (une table) dans la BDD. La première question qui va être posé est le nom de l'entité. Ensuite, on nous demandera les propriétés (les colonnes de la table), donc :
      1. Le nom de la propriété
      2. Le type de propriété
-      - string
-      - integer
-      - relation
-      - boolean
+     - string
+     - integer
+     - relation
+     - boolean
      3. La longueur (si le type est 'string'), la relation (ManyToMany, ManyToOne, OneToMany, OneToOne)..
      4. Si la propriété peut-être nullable ou non
 2. Appuyer sur la touche Return pour arrêter l'ajout de propriété.
@@ -113,22 +120,23 @@ Ls données indispensables correspondent souvent aux données de l'administrateu
 
 1. Dans `App/DataFixtures/AppFixtures.php`
    - Le fichier basique ressemble à cela :
-   ```<?php
-   namespace App\DataFixtures;
 
-   use Doctrine\Bundle\FixturesBundle\Fixture;
-   use Doctrine\Persistence\ObjectManager;
+````<?php
+namespace App\DataFixtures;
+
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
 
 
-   class AppFixtures extends Fixture
-   {
+class AppFixtures extends Fixture
+{
 
-         // Sauvegarde dans la BDD
-         $manager->flush();
-      }
-   }```
-   
+      // Sauvegarde dans la BDD
+      $manager->flush();
+   }
+}````
+
    - En haut du fichier, nous avons la balise d'ouverture de langage PHP, suivi de l'importation de dépendances et de fichier.
 2. Création des données indispensables :
-   
+
 
