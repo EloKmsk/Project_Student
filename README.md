@@ -6,7 +6,7 @@ Projet Symfony avec mise en place d'une BDD.
 
 Avant de commencer un projet, il est important d'organiser la structure de sa BDD.
 
-1. user
+### user
    - id: clé primaire
    - email: varchar 190, unique
    - roles: text
@@ -15,18 +15,21 @@ Avant de commencer un projet, il est important d'organiser la structure de sa BD
    - lastname: varchar 190
    - phone: varchar 20, nullable
    - school_year_id: clé étrangère qui pointe vers school_year.id
-2. school_year
+### school_year
    - id: clé primaire
    - name: varchar 190
    - date_start: datetime, nullable
    - date_end: datetime, nullable
-3. project
+### project
    - id: clé primaire
    - name: varchar 190
    - description: text, nullable
-4. project_user
+### project_user
    - project_id: clé étrangère qui pointe vers project.id
    - user_id: clé étrangère qui pointe vers user.id
+
+1. L'entité User a une relation ManyToMany avec Project.
+2. L'entité User a une relation ManyToOne avec SchoolYear.
 
 ## Création d'un utilisateur pour se connecter à la BDD
 
@@ -79,10 +82,53 @@ Pour créer les tables de la BDD, nous allons utiliser Doctrine. Voici les déma
    - Cette commande va nous permettre de créer une entité (une table) dans la BDD. La première question qui va être posé est le nom de l'entité. Ensuite, on nous demandera les propriétés (les colonnes de la table), donc :
      1. Le nom de la propriété
      2. Le type de propriété
-     3. La longueur (si le type est 'string')
+      - string
+      - integer
+      - relation
+      - boolean
+     3. La longueur (si le type est 'string'), la relation (ManyToMany, ManyToOne, OneToMany, OneToOne)..
      4. Si la propriété peut-être nullable ou non
 2. Appuyer sur la touche Return pour arrêter l'ajout de propriété.
 3. `php bin/console make:migration`
    - Cette commande nous permet de créer une migration. Celle-ci va récupérer tout ce que l'on vient de créer (les entités).
 4. `php bin/console doctrine:migrations:migrate`
    - Cette commande nous permet d'éxécuter les requêtes. Après cette commande, nous pourrons voir que les tables se sont bien créés dans la BDD.
+5. `php bin/console doctrine:schema:validate`
+   - Cette commande nous permet de vérifier si tout est à jour au niveau du projet Symfony et la BDD.
+
+## Installation des dépendances nécessaires
+
+Les dépendances ci-dessous nous permettrons de créer des fixtures, de créer de fausses données ainsi que de sluggifier, voici les commandes à suivre :
+
+1. `composer require doctrine/doctrine-fixtures-bundle`
+   - Cette commande va installer doctrine-fixtures-bundle. Elle va nous permettre de créer plus facilement des fixtures.
+2. `composer require fzaninotto/faker`
+   - Cette commande nous permet d'installer une dépendance qui va générer des données de façons aléatoires (des fausses données).
+3. `composer require javiereguiluz/easyslugger`
+   - Cette commande nous permet d'installer une dépendance qui va transformer toute chaîne de caractères en chaîne de caractères sans majuscules, sans accents et sans espaces.
+
+## Injection de données indispensables
+
+Ls données indispensables correspondent souvent aux données de l'administrateur de la BDD. Voici la procédure à suivre.
+
+1. Dans App/DataFixtures/AppFixtures.php
+   - Le fichier basique ressemble à cela :
+   `<?php
+   namespace App\DataFixtures;
+
+   use Doctrine\Bundle\FixturesBundle\Fixture;
+   use Doctrine\Persistence\ObjectManager;
+
+
+   class AppFixtures extends Fixture
+   {
+
+         // Sauvegarde dans la BDD
+         $manager->flush();
+      }
+   }
+   `
+   - En haut du fichier, nous avons la balise d'ouverture de langage PHP, suivi de l'importation de dépendances et de fichier.
+2. Création des données indispensables :
+   
+
