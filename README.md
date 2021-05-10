@@ -119,7 +119,6 @@ Les dépendances ci-dessous nous permettrons de créer des fixtures, de créer d
 Ls données indispensables correspondent souvent aux données de l'administrateur de la BDD. Voici la procédure à suivre.
 
 1. Dans `App/DataFixtures/AppFixtures.php`
-
    - Le fichier basique ressemble à cela :
 
    ```
@@ -131,13 +130,183 @@ Ls données indispensables correspondent souvent aux données de l'administrateu
 
    class AppFixtures extends Fixture
    {
-
-     // Sauvegarde dans la BDD
-     $manager->flush();
-
+      public function load(ObjectManager $manager)
+      {
+         // Sauvegarde dans la BDD
+         $manager->flush();
+      }
    }
    ```
-
    - En haut du fichier, nous avons la balise d'ouverture de langage PHP, suivi de l'importation de dépendances et de fichier.
 
-2. Création des données indispensables :
+2. Création des données indispensables, toujours dans `App/DataFixtures/AppFixtures.php`
+   - Nous allons créer un User avec un role ADMIN, sans oublier l'importation des fichiers d'entité et les dépendances :
+
+   ```
+   <?php
+   namespace App\DataFixtures;
+
+   use App\Entity\User;
+   use App\Entity\SchoolYear;
+   use App\Entity\Project;
+   use EasySlugger\Slugger;
+   use Doctrine\Bundle\FixturesBundle\Fixture;
+   use Doctrine\Persistence\ObjectManager;
+   use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+   class AppFixtures extends Fixture
+   {
+      private $encoder;
+
+      public function __construct(UserPasswordEncoderInterface $encoder)
+      {
+        $this->encoder = $encoder;
+      }
+
+      public function load(ObjectManager $manager)
+      {
+         // Création User Admin
+         $user = new User();
+         $user->setFirstname('Foo');
+         $user->setLastname('Bar');
+         $user->setEmail('admin@example.com');
+         $user->setRoles(['ROLE_ADMIN']);
+         // Encodage du mot de passe
+         $password = $this->encoder->encodePassword($user, 'motdepasse');
+         $user->setPassword($password);
+         $manager->persist($user);
+
+         // Sauvegarde dans la BDD
+         $manager->flush();
+      }
+   }
+   ```
+   - Avant de lancer la fixture, nous allons entrer les données de test qui vont être générer par la/les dépendance(s).
+
+## Injection de données test
+
+Les données test, comme son nom l'indique, correspondent à des données aléatoires qui vont être générer pour tester l'application.
+
+1. Dans `App/DataFixtures/AppFixtures.php`, à la suite des données indispensables que nous avons fait précédemment :
+
+   ```
+   <?php
+
+   namespace App\DataFixtures;
+
+   use App\Entity\User;
+   use App\Entity\SchoolYear;
+   use App\Entity\Project;
+   use EasySlugger\Slugger;
+   use Doctrine\Bundle\FixturesBundle\Fixture;
+   use Doctrine\Persistence\ObjectManager;
+   use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+   class AppFixtures extends Fixture
+   {
+      private $encoder;
+
+      public function __construct(UserPasswordEncoderInterface $encoder)
+      {
+         $this->encoder = $encoder;
+      }
+
+      public function load(ObjectManager $manager)
+      {
+         // Création User Admin
+         $user = new User();
+         $user->setFirstname('Foo');
+         $user->setLastname('Bar');
+         $user->setEmail('admin@example.com');
+         $user->setRoles(['ROLE_ADMIN']);
+         // Encodage du mot de passe
+         $password = $this->encoder->encodePassword($user, 'motdepasse');
+         $user->setPassword($password);
+         $manager->persist($user);
+
+         // Création du générateur de fausses données
+         $faker = \Faker\Factory::create('fr_FR');
+
+         // Création de 60 Student
+         for ($i = 0; $i < 60; $i++) {
+
+               // Déclaration variable qui générent les fausses données
+               $firstname = $faker->firstName;
+               $lastname = $faker->lastName;
+               $email = Slugger::slugify($firstname).'.'.Slugger::slugify($lastname).'@'.$faker->safeEmailDomain;
+
+               $user = new User();
+               $user->setFirstname($firstname);
+               $user->setLastname($lastname);
+               $user->setEmail($email);
+               $user->setRoles(['ROLE_STUDENT']);
+               $user->setPassword($password);
+               $manager->persist($user);
+         }
+
+         // Création de 5 Teacher
+         for ($i = 0; $i < 5; $i++) {
+
+               // Déclaration variable qui générent les fausses données
+               $firstname = $faker->firstName;
+               $lastname = $faker->lastName;
+               $email = Slugger::slugify($firstname).'.'.Slugger::slugify($lastname).'@'.$faker->safeEmailDomain;
+
+               $user = new User();
+               $user->setFirstname($firstname);
+               $user->setLastname($lastname);
+               $user->setEmail($email);
+               $user->setRoles(['ROLE_TEACHER']);
+               $user->setPassword($password);
+               $manager->persist($user);
+         }
+
+         // Création de 15 Client
+         for ($i = 0; $i < 15; $i++) {
+
+               // Déclaration variable qui générent les fausses données
+               $firstname = $faker->firstName;
+               $lastname = $faker->lastName;
+               $email = Slugger::slugify($firstname).'.'.Slugger::slugify($lastname).'@'.$faker->safeEmailDomain;
+
+               $user = new User();
+               $user->setFirstname($firstname);
+               $user->setLastname($lastname);
+               $user->setEmail($email);
+               $user->setRoles(['ROLE_CLIENT']);
+               $user->setPassword($password);
+               $manager->persist($user);
+         }
+
+         // Création de 3 SchoolYear
+         for ($i = 0; $i < 3; $i++) {
+
+               // Déclaration variable qui générent les fausses données
+               $name = $faker->word;
+
+               $schoolyear = new SchoolYear();
+               $schoolyear->setName($name);
+               $manager->persist($schoolyear);
+         }
+
+         // Création de 20 Project
+         for ($i = 0; $i < 20; $i++) {
+
+               // Déclaration variable qui générent les fausses données
+               $name = $faker->word;
+
+               $project = new Project();
+               $project->setName($name);
+               $manager->persist($project);
+         }
+
+         // Sauvegarde dans la BDD
+         $manager->flush();
+      }
+   }
+   ```
+2. Maintenant que les données sont dans le fichier `AppFixtures.php`, nous allons pousser ces données dans la BDD.
+   - Pour cela, nous faisons la commande `php bin/console doctrine:fixtures:load`
+   - On va nous demander si nous voulons effacer toutes les données déjà mises dans la BDD afin de les remplacer par les données du fichier `AppFixtures.php`, nous mettons 'yes' et on appuie sur Return.
+
+
