@@ -1,6 +1,6 @@
 # ECF_Back avec Symfony PARTIE 1
 
-Projet Symfony avec mise en place d'une BDD.
+Première partie d'un projet Symfony avec mise en place d'une BDD.
 
 ## Structure de la BDD
 
@@ -311,3 +311,142 @@ Les données test, comme son nom l'indique, correspondent à des données aléat
 
 # ECF_Back avec Symfony PARTIE 2
 
+Deuxième partie du projet Symfony avec la création des URL qui permettent d'afficher des données de la BDD.
+
+## Création des requêtes
+
+Pour chaque entité, suivre ces étapes dans le terminal :
+
+1. `php bin/console make:crud`
+   - Cette commande permet de créer un controller pour l'entité voulu.
+   - Tout d'abord, on va nous demander pour quelle entité souhaitons-nous créer le CRUD.
+   - Pour finir, on nous demande le nom que l'on souhaite donner au controller de l'entité souhaitée.
+2. Dans `App/src/Controller`
+   - Nous y trouverons tout nos controllers créés grâce à la commande précédente, voici un exemple du résultat pour le controller de l'entité Project :
+   ```
+   <?php
+
+   namespace App\Controller;
+
+   use App\Entity\Project;
+   use App\Form\ProjectType;
+   use App\Repository\ProjectRepository;
+   use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+   use Symfony\Component\HttpFoundation\Request;
+   use Symfony\Component\HttpFoundation\Response;
+   use Symfony\Component\Routing\Annotation\Route;
+
+   /**
+   * @Route("/project")
+   */
+   class ProjectController extends AbstractController
+   {
+      /**
+      * @Route("/", name="project_index", methods={"GET"})
+      */
+      public function index(ProjectRepository $projectRepository): Response
+      {
+         return $this->render('project/index.html.twig', [
+               'projects' => $projectRepository->findAll(),
+         ]);
+      }
+
+      /**
+      * @Route("/new", name="project_new", methods={"GET","POST"})
+      */
+      public function new(Request $request): Response
+      {
+         $project = new Project();
+         $form = $this->createForm(ProjectType::class, $project);
+         $form->handleRequest($request);
+
+         if ($form->isSubmitted() && $form->isValid()) {
+               $entityManager = $this->getDoctrine()->getManager();
+               $entityManager->persist($project);
+               $entityManager->flush();
+
+               return $this->redirectToRoute('project_index');
+         }
+
+         return $this->render('project/new.html.twig', [
+               'project' => $project,
+               'form' => $form->createView(),
+         ]);
+      }
+
+      /**
+      * @Route("/{id}", name="project_show", methods={"GET"})
+      */
+      public function show(Project $project): Response
+      {
+         return $this->render('project/show.html.twig', [
+               'project' => $project,
+         ]);
+      }
+
+      /**
+      * @Route("/{id}/edit", name="project_edit", methods={"GET","POST"})
+      */
+      public function edit(Request $request, Project $project): Response
+      {
+         $form = $this->createForm(ProjectType::class, $project);
+         $form->handleRequest($request);
+
+         if ($form->isSubmitted() && $form->isValid()) {
+               $this->getDoctrine()->getManager()->flush();
+
+               return $this->redirectToRoute('project_index');
+         }
+
+         return $this->render('project/edit.html.twig', [
+               'project' => $project,
+               'form' => $form->createView(),
+         ]);
+      }
+
+      /**
+      * @Route("/{id}", name="project_delete", methods={"POST"})
+      */
+      public function delete(Request $request, Project $project): Response
+      {
+         if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->request->get('_token'))) {
+               $entityManager = $this->getDoctrine()->getManager();
+               $entityManager->remove($project);
+               $entityManager->flush();
+         }
+
+         return $this->redirectToRoute('project_index');
+      }
+   }
+   ```
+   - Le controller nous a créé une requête pour :
+      - Afficher toutes les données de la table Project.
+      - Afficher les données de Project en fonction d'un id.
+      - Permettre de modifier des données de Project en fonction d'un id.
+      - Permettre de supprimer un Project en fonction d'un id.
+
+## Tester les requêtes grâce à une URL
+
+Pour tester les requêtes, nous devons lancer le server Symfony.
+
+1. `symfony server:start`
+   - Cette commande va nous permettre d'accéder au projet Symfony qui se lance à l'adresse suivante : `localhost:8000`
+
+## Les requêtes disponibles
+
+1. `localhost8000/user`
+   - Renvoie la liste des users.
+2. `localhost:8000/user/{id}` en remplaçant {id} par l'id que  l'on souhaite
+   - Renvoie les données d'un user en fonction de son id.
+3. `localhost:8000/user/search/{role}` en remplaçant {role} par le rôle que l'on souhaite (ROLE_ADMIN, ROLE_STUDENT, ROLE_TEACHER, ROLE_CLIENT)
+   - Renvoie une liste de tous les users qui correspondent au rôle que l'on a mit dans l'URL.
+4. `localhost:8000/schoolyear`
+   - Renvoie la liste des schoolyears.
+5. `localhost:8000/schoolyear/{id}` en remplaçant {id} par l'id que l'on souhaite
+   - Renvoie les données d'une schoolyear en fonction de son id.
+6. `localhost:8000/project`
+   - Renvoie la liste des projects.
+7. `localhost:8000/project/{id}` en remplaçant {id} par l'id que l'on souhaite
+   - Renvoie les données d'un project en fonction de son id.
+
+# ECF_Back avec Symfony PARTIE 3

@@ -26,7 +26,7 @@ class AppFixtures extends Fixture
         $user->setFirstname('Foo');
         $user->setLastname('Bar');
         $user->setEmail('admin@example.com');
-        $user->setRoles(['ROLE_ADMIN']);
+        $user->setRoles('ROLE_ADMIN');
         // Encodage du mot de passe
         $password = $this->encoder->encodePassword($user, 'motdepasse');
         $user->setPassword($password);
@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
             $user->setFirstname($firstname);
             $user->setLastname($lastname);
             $user->setEmail($email);
-            $user->setRoles(['ROLE_STUDENT']);
+            $user->setRoles('ROLE_STUDENT');
             $user->setPassword($password);
             $manager->persist($user);
         }
@@ -64,7 +64,7 @@ class AppFixtures extends Fixture
             $user->setFirstname($firstname);
             $user->setLastname($lastname);
             $user->setEmail($email);
-            $user->setRoles(['ROLE_TEACHER']);
+            $user->setRoles('ROLE_TEACHER');
             $user->setPassword($password);
             $manager->persist($user);
         }
@@ -81,7 +81,7 @@ class AppFixtures extends Fixture
             $user->setFirstname($firstname);
             $user->setLastname($lastname);
             $user->setEmail($email);
-            $user->setRoles(['ROLE_CLIENT']);
+            $user->setRoles('ROLE_CLIENT');
             $user->setPassword($password);
             $manager->persist($user);
         }
