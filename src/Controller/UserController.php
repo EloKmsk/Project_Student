@@ -9,11 +9,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class UserController extends AbstractController
 {
     /**
      * @Route("/user", name="user_index", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function index(UserRepository $userRepository): Response
     {
@@ -24,6 +27,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/user/new", name="user_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -47,6 +51,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/user/{id}", name="user_show", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function show(User $user): Response
     {
@@ -57,6 +62,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/user/search/{roles}", name="user_test", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function test(User $user, UserRepository $userRepository, $roles): Response
     {
@@ -73,6 +79,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/user/{id}/edit", name="user_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, User $user): Response
     {
@@ -93,6 +100,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/user/{id}", name="user_delete", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, User $user): Response
     {

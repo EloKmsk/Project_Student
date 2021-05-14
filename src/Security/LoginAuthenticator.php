@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Entity\Project;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,8 +97,25 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
             return new RedirectResponse($targetPath);
         }
 
-        // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        $user = $token->getUser();
+
+        $roleNames = $token->getRoleNames();
+
+        if (in_array('ROLE_ADMIN', $roleNames)) {
+            return new RedirectResponse($this->urlGenerator->generate("user_index"));
+        } elseif (in_array('ROLE_TEACHER', $roleNames)) {
+            return new RedirectResponse($this->urlGenerator->generate("school_year_index"));
+        } elseif (in_array('ROLE_STUDENT', $roleNames)) {
+            return new RedirectResponse($this->urlGenerator->generate("school_year_show", [
+                'id' => $user->getSchoolYear()->getId(),
+            ]));
+        } elseif (in_array('ROLE_CLIENT', $roleNames)) {
+           return new RedirectResponse($this->urlGenerator->generate("project_show", [
+            'id' => $user->getSchoolYear()->getId(),
+
+           ]));
+        }
+
     }
 
     protected function getLoginUrl()

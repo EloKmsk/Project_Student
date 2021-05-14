@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @Route("/project")
@@ -17,6 +19,7 @@ class ProjectController extends AbstractController
 {
     /**
      * @Route("/", name="project_index", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function index(ProjectRepository $projectRepository): Response
     {
@@ -27,6 +30,7 @@ class ProjectController extends AbstractController
 
     /**
      * @Route("/new", name="project_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -50,6 +54,7 @@ class ProjectController extends AbstractController
 
     /**
      * @Route("/{id}", name="project_show", methods={"GET"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_CLIENT')")
      */
     public function show(Project $project): Response
     {
@@ -60,6 +65,7 @@ class ProjectController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="project_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, Project $project): Response
     {
@@ -80,6 +86,7 @@ class ProjectController extends AbstractController
 
     /**
      * @Route("/{id}", name="project_delete", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Project $project): Response
     {

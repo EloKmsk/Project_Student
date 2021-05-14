@@ -450,3 +450,81 @@ Pour tester les requêtes, nous devons lancer le server Symfony.
    - Renvoie les données d'un project en fonction de son id.
 
 # ECF_Back avec Symfony PARTIE 3
+
+Dernière partie du projet Symfony avec la création d'un formulaire de connexion ainsi que des URL pour regarder/modifier/supprimer des données de la BDD.
+
+## Création du formulaire de connexion
+
+Pour créer un formulaire suivons ces commandes :
+
+1. `php bin/console make:form`
+   - Cette commande va nous permettre de générer un formulaire qui prend comme données de vérification, les données de la table User.
+   - Elle va nous générer un formulaire de connexion que nous accéderons par `localhost:8000/login`.
+2. La commande précédente nous créait aussi un SecurityController dans `App/src/Controller/SecurityController.php`
+   - Voici le contenu du fichier :
+   ```
+   <?php
+
+   namespace App\Controller;
+
+   use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+   use Symfony\Component\HttpFoundation\Response;
+   use Symfony\Component\Routing\Annotation\Route;
+   use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
+   class SecurityController extends AbstractController
+   {
+      /**
+      * @Route("/login", name="app_login")
+      */
+      public function login(AuthenticationUtils $authenticationUtils): Response
+      {
+         // if ($this->getUser()) {
+         //     return $this->redirectToRoute('target_path');
+         // }
+
+         // get the login error if there is one
+         $error = $authenticationUtils->getLastAuthenticationError();
+         // last username entered by the user
+         $lastUsername = $authenticationUtils->getLastUsername();
+
+         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+      }
+
+      /**
+      * @Route("/logout", name="app_logout")
+      */
+      public function logout()
+      {
+         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+      }
+   }
+   ```
+   - Nous pouvons remarquer que le COntroller a aussi généré un `localhost:8000/logout` qui va nous permettre de se déconnecter.
+
+## Liste des URL disponibles
+           
+NOM DE LA ROUTE              METHODE              URL
+  project_index              GET             /project/                          
+  project_new                GET|POST        /project/new                       
+  project_show               GET             /project/{id}                      
+  project_edit               GET|POST        /project/{id}/edit                 
+  project_delete             POST            /project/{id}                      
+  school_year_index          GET             /schoolyear/                       
+  school_year_new            GET|POST        /schoolyear/new                    
+  school_year_show           GET             /schoolyear/{id}                   
+  school_year_edit           GET|POST        /schoolyear/{id}/edit              
+  school_year_delete         POST            /schoolyear/{id}                   
+  app_login                  ANY             /login                             
+  app_logout                 ANY             /logout                            
+  user_index                 GET             /user                              
+  user_new                   GET|POST        /user/new                          
+  user_show                  GET             /user/{id}                         
+  user_test                  GET             /user/search/{roles}               
+  user_edit                  GET|POST        /user/{id}/edit                    
+  user_delete                POST            /user/{id}                         
+
+
+
+   
+

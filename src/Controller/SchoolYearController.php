@@ -9,6 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * @Route("/schoolyear")
@@ -17,6 +23,7 @@ class SchoolYearController extends AbstractController
 {
     /**
      * @Route("/", name="school_year_index", methods={"GET"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
     public function index(SchoolYearRepository $schoolYearRepository): Response
     {
@@ -27,6 +34,7 @@ class SchoolYearController extends AbstractController
 
     /**
      * @Route("/new", name="school_year_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -50,6 +58,7 @@ class SchoolYearController extends AbstractController
 
     /**
      * @Route("/{id}", name="school_year_show", methods={"GET"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_STUDENT')")
      */
     public function show(SchoolYear $schoolYear): Response
     {
@@ -60,6 +69,7 @@ class SchoolYearController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="school_year_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, SchoolYear $schoolYear): Response
     {
@@ -80,6 +90,7 @@ class SchoolYearController extends AbstractController
 
     /**
      * @Route("/{id}", name="school_year_delete", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, SchoolYear $schoolYear): Response
     {
