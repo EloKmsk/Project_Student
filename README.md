@@ -503,26 +503,27 @@ Pour créer un formulaire suivons ces commandes :
    - Nous pouvons remarquer que le COntroller a aussi généré un `localhost:8000/logout` qui va nous permettre de se déconnecter.
 
 ## Liste des URL disponibles
-           
-NOM DE LA ROUTE              METHODE              URL
-  project_index              GET             /project/                          
-  project_new                GET|POST        /project/new                       
-  project_show               GET             /project/{id}                      
-  project_edit               GET|POST        /project/{id}/edit                 
-  project_delete             POST            /project/{id}                      
-  school_year_index          GET             /schoolyear/                       
-  school_year_new            GET|POST        /schoolyear/new                    
-  school_year_show           GET             /schoolyear/{id}                   
-  school_year_edit           GET|POST        /schoolyear/{id}/edit              
-  school_year_delete         POST            /schoolyear/{id}                   
-  app_login                  ANY             /login                             
-  app_logout                 ANY             /logout                            
-  user_index                 GET             /user                              
-  user_new                   GET|POST        /user/new                          
-  user_show                  GET             /user/{id}                         
-  user_test                  GET             /user/search/{roles}               
-  user_edit                  GET|POST        /user/{id}/edit                    
-  user_delete                POST            /user/{id}                         
+
+  | NOM DE LA ROUTE         | METHODE         | URL |
+  | ------|-----|-----|
+  | project_index             | GET            | /project/ |                         
+  | project_new               | GET|POST       | /project/new |                      
+  | project_show              | GET            | /project/{id} |                     
+  | project_edit              | GET|POST       | /project/{id}/edit |                
+  | project_delete            | POST           | /project/{id} |                     
+  | school_year_index         | GET            | /schoolyear/ |                      
+  | school_year_new           | GET|POST       | /schoolyear/new |                   
+  | school_year_show          | GET            | /schoolyear/{id} |                 
+  | school_year_edit          | GET|POST       | /schoolyear/{id}/edit |             
+  | school_year_delete        | POST           | /schoolyear/{id} |                  
+  | app_login                 | ANY            | /login |                            
+  | app_logout                | ANY            | /logout |                           
+  | user_index                | GET            | /user |                             
+  | user_new                  | GET|POST       | /user/new |                         
+  | user_show                 | GET            | /user/{id} |                        
+  | user_test                 | GET            | /user/search/{roles} |              
+  | user_edit                 | GET|POST       | /user/{id}/edit |                   
+  | user_delete               | POST           | /user/{id} |   
 
 
 
